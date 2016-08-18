@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+Hello, {{ user.username }}
+<p>Number of games you have: {{ number_of_games }}</p>
+
+
+
+{% for game in game_list %}
+<p><img src="{{ game.cover.url }}" height="100px"></p>
+{% endfor %}
+
+{{ user.profile.account_verified }}
+
+{% if request.user.profile.account_verified %} (verified) {% else %} (unverified) {% endif %}
+
+{% endblock %}

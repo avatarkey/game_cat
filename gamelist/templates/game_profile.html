@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<img src="{{ game_profiles.cover.url }}" height=200px>
+{{ game_profiles.name }}
+{% if user.is_authenticated %}
+
+Nice
+
+
+<p>Hello, {{ user.username }}</p>
+
+
+
+
+<form action="#" method="post">{% csrf_token %}
+{% if user not in game_users %}
+ <input type="submit" class="btn" value="add" name="add">
+{% else %}
+ <input type="submit" class="btn" value="remove" name="del">
+{% endif %}
+</form>
+
+
+{% endif %}
+
+{% endblock %}

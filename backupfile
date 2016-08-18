@@ -1,0 +1,2434 @@
+--
+-- PostgreSQL database cluster dump
+--
+
+SET default_transaction_read_only = off;
+
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+
+--
+-- Roles
+--
+
+CREATE ROLE "Avatar2k";
+ALTER ROLE "Avatar2k" WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN NOREPLICATION NOBYPASSRLS;
+CREATE ROLE avatar2k;
+ALTER ROLE avatar2k WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'md5052314ff71025f1c0b2ea631f81dccf3';
+CREATE ROLE postgres;
+ALTER ROLE postgres WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION BYPASSRLS;
+
+
+
+
+
+
+--
+-- Database creation
+--
+
+CREATE DATABASE "Avatar2k" WITH TEMPLATE = template0 OWNER = "Avatar2k";
+CREATE DATABASE gamelist WITH TEMPLATE = template0 OWNER = "Avatar2k";
+REVOKE ALL ON DATABASE gamelist FROM PUBLIC;
+REVOKE ALL ON DATABASE gamelist FROM "Avatar2k";
+GRANT ALL ON DATABASE gamelist TO "Avatar2k";
+GRANT CONNECT,TEMPORARY ON DATABASE gamelist TO PUBLIC;
+GRANT ALL ON DATABASE gamelist TO avatar2k;
+REVOKE ALL ON DATABASE template1 FROM PUBLIC;
+REVOKE ALL ON DATABASE template1 FROM postgres;
+GRANT ALL ON DATABASE template1 TO postgres;
+GRANT CONNECT ON DATABASE template1 TO PUBLIC;
+
+
+\connect "Avatar2k"
+
+SET default_transaction_read_only = off;
+
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.5.3
+-- Dumped by pg_dump version 9.5.3
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+\connect gamelist
+
+SET default_transaction_read_only = off;
+
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.5.3
+-- Dumped by pg_dump version 9.5.3
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: account_emailaddress; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE account_emailaddress (
+    id integer NOT NULL,
+    email character varying(254) NOT NULL,
+    verified boolean NOT NULL,
+    "primary" boolean NOT NULL,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE account_emailaddress OWNER TO avatar2k;
+
+--
+-- Name: account_emailaddress_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE account_emailaddress_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE account_emailaddress_id_seq OWNER TO avatar2k;
+
+--
+-- Name: account_emailaddress_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE account_emailaddress_id_seq OWNED BY account_emailaddress.id;
+
+
+--
+-- Name: account_emailconfirmation; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE account_emailconfirmation (
+    id integer NOT NULL,
+    created timestamp with time zone NOT NULL,
+    sent timestamp with time zone,
+    key character varying(64) NOT NULL,
+    email_address_id integer NOT NULL
+);
+
+
+ALTER TABLE account_emailconfirmation OWNER TO avatar2k;
+
+--
+-- Name: account_emailconfirmation_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE account_emailconfirmation_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE account_emailconfirmation_id_seq OWNER TO avatar2k;
+
+--
+-- Name: account_emailconfirmation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE account_emailconfirmation_id_seq OWNED BY account_emailconfirmation.id;
+
+
+--
+-- Name: auth_group; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE auth_group (
+    id integer NOT NULL,
+    name character varying(80) NOT NULL
+);
+
+
+ALTER TABLE auth_group OWNER TO avatar2k;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE auth_group_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_group_id_seq OWNER TO avatar2k;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE auth_group_id_seq OWNED BY auth_group.id;
+
+
+--
+-- Name: auth_group_permissions; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE auth_group_permissions (
+    id integer NOT NULL,
+    group_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE auth_group_permissions OWNER TO avatar2k;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE auth_group_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_group_permissions_id_seq OWNER TO avatar2k;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE auth_group_permissions_id_seq OWNED BY auth_group_permissions.id;
+
+
+--
+-- Name: auth_permission; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE auth_permission (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    content_type_id integer NOT NULL,
+    codename character varying(100) NOT NULL
+);
+
+
+ALTER TABLE auth_permission OWNER TO avatar2k;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE auth_permission_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_permission_id_seq OWNER TO avatar2k;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE auth_permission_id_seq OWNED BY auth_permission.id;
+
+
+--
+-- Name: auth_user; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE auth_user (
+    id integer NOT NULL,
+    password character varying(128) NOT NULL,
+    last_login timestamp with time zone,
+    is_superuser boolean NOT NULL,
+    username character varying(30) NOT NULL,
+    first_name character varying(30) NOT NULL,
+    last_name character varying(30) NOT NULL,
+    email character varying(254) NOT NULL,
+    is_staff boolean NOT NULL,
+    is_active boolean NOT NULL,
+    date_joined timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE auth_user OWNER TO avatar2k;
+
+--
+-- Name: auth_user_groups; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE auth_user_groups (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    group_id integer NOT NULL
+);
+
+
+ALTER TABLE auth_user_groups OWNER TO avatar2k;
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE auth_user_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_user_groups_id_seq OWNER TO avatar2k;
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE auth_user_groups_id_seq OWNED BY auth_user_groups.id;
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE auth_user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_user_id_seq OWNER TO avatar2k;
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE auth_user_id_seq OWNED BY auth_user.id;
+
+
+--
+-- Name: auth_user_user_permissions; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE auth_user_user_permissions (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE auth_user_user_permissions OWNER TO avatar2k;
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE auth_user_user_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_user_user_permissions_id_seq OWNER TO avatar2k;
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE auth_user_user_permissions_id_seq OWNED BY auth_user_user_permissions.id;
+
+
+--
+-- Name: django_admin_log; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE django_admin_log (
+    id integer NOT NULL,
+    action_time timestamp with time zone NOT NULL,
+    object_id text,
+    object_repr character varying(200) NOT NULL,
+    action_flag smallint NOT NULL,
+    change_message text NOT NULL,
+    content_type_id integer,
+    user_id integer NOT NULL,
+    CONSTRAINT django_admin_log_action_flag_check CHECK ((action_flag >= 0))
+);
+
+
+ALTER TABLE django_admin_log OWNER TO avatar2k;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE django_admin_log_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE django_admin_log_id_seq OWNER TO avatar2k;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE django_admin_log_id_seq OWNED BY django_admin_log.id;
+
+
+--
+-- Name: django_content_type; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE django_content_type (
+    id integer NOT NULL,
+    app_label character varying(100) NOT NULL,
+    model character varying(100) NOT NULL
+);
+
+
+ALTER TABLE django_content_type OWNER TO avatar2k;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE django_content_type_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE django_content_type_id_seq OWNER TO avatar2k;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE django_content_type_id_seq OWNED BY django_content_type.id;
+
+
+--
+-- Name: django_migrations; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE django_migrations (
+    id integer NOT NULL,
+    app character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
+    applied timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE django_migrations OWNER TO avatar2k;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE django_migrations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE django_migrations_id_seq OWNER TO avatar2k;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE django_migrations_id_seq OWNED BY django_migrations.id;
+
+
+--
+-- Name: django_session; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE django_session (
+    session_key character varying(40) NOT NULL,
+    session_data text NOT NULL,
+    expire_date timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE django_session OWNER TO avatar2k;
+
+--
+-- Name: django_site; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE django_site (
+    id integer NOT NULL,
+    domain character varying(100) NOT NULL,
+    name character varying(50) NOT NULL
+);
+
+
+ALTER TABLE django_site OWNER TO avatar2k;
+
+--
+-- Name: django_site_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE django_site_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE django_site_id_seq OWNER TO avatar2k;
+
+--
+-- Name: django_site_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE django_site_id_seq OWNED BY django_site.id;
+
+
+--
+-- Name: gamelist_developer; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE gamelist_developer (
+    id integer NOT NULL,
+    name character varying(100),
+    founded date,
+    description text
+);
+
+
+ALTER TABLE gamelist_developer OWNER TO avatar2k;
+
+--
+-- Name: gamelist_developer_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE gamelist_developer_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE gamelist_developer_id_seq OWNER TO avatar2k;
+
+--
+-- Name: gamelist_developer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE gamelist_developer_id_seq OWNED BY gamelist_developer.id;
+
+
+--
+-- Name: gamelist_game; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE gamelist_game (
+    id integer NOT NULL,
+    name character varying(100),
+    date date,
+    cover character varying(100),
+    developer_id integer
+);
+
+
+ALTER TABLE gamelist_game OWNER TO avatar2k;
+
+--
+-- Name: gamelist_game_genre; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE gamelist_game_genre (
+    id integer NOT NULL,
+    game_id integer NOT NULL,
+    genre_id integer NOT NULL
+);
+
+
+ALTER TABLE gamelist_game_genre OWNER TO avatar2k;
+
+--
+-- Name: gamelist_game_genre_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE gamelist_game_genre_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE gamelist_game_genre_id_seq OWNER TO avatar2k;
+
+--
+-- Name: gamelist_game_genre_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE gamelist_game_genre_id_seq OWNED BY gamelist_game_genre.id;
+
+
+--
+-- Name: gamelist_game_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE gamelist_game_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE gamelist_game_id_seq OWNER TO avatar2k;
+
+--
+-- Name: gamelist_game_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE gamelist_game_id_seq OWNED BY gamelist_game.id;
+
+
+--
+-- Name: gamelist_game_users; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE gamelist_game_users (
+    id integer NOT NULL,
+    game_id integer NOT NULL,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE gamelist_game_users OWNER TO avatar2k;
+
+--
+-- Name: gamelist_game_users_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE gamelist_game_users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE gamelist_game_users_id_seq OWNER TO avatar2k;
+
+--
+-- Name: gamelist_game_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE gamelist_game_users_id_seq OWNED BY gamelist_game_users.id;
+
+
+--
+-- Name: gamelist_genre; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE gamelist_genre (
+    id integer NOT NULL,
+    name character varying(50)
+);
+
+
+ALTER TABLE gamelist_genre OWNER TO avatar2k;
+
+--
+-- Name: gamelist_genre_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE gamelist_genre_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE gamelist_genre_id_seq OWNER TO avatar2k;
+
+--
+-- Name: gamelist_genre_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE gamelist_genre_id_seq OWNED BY gamelist_genre.id;
+
+
+--
+-- Name: socialaccount_socialaccount; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE socialaccount_socialaccount (
+    id integer NOT NULL,
+    provider character varying(30) NOT NULL,
+    uid character varying(191) NOT NULL,
+    last_login timestamp with time zone NOT NULL,
+    date_joined timestamp with time zone NOT NULL,
+    extra_data text NOT NULL,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE socialaccount_socialaccount OWNER TO avatar2k;
+
+--
+-- Name: socialaccount_socialaccount_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE socialaccount_socialaccount_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE socialaccount_socialaccount_id_seq OWNER TO avatar2k;
+
+--
+-- Name: socialaccount_socialaccount_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE socialaccount_socialaccount_id_seq OWNED BY socialaccount_socialaccount.id;
+
+
+--
+-- Name: socialaccount_socialapp; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE socialaccount_socialapp (
+    id integer NOT NULL,
+    provider character varying(30) NOT NULL,
+    name character varying(40) NOT NULL,
+    client_id character varying(191) NOT NULL,
+    secret character varying(191) NOT NULL,
+    key character varying(191) NOT NULL
+);
+
+
+ALTER TABLE socialaccount_socialapp OWNER TO avatar2k;
+
+--
+-- Name: socialaccount_socialapp_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE socialaccount_socialapp_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE socialaccount_socialapp_id_seq OWNER TO avatar2k;
+
+--
+-- Name: socialaccount_socialapp_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE socialaccount_socialapp_id_seq OWNED BY socialaccount_socialapp.id;
+
+
+--
+-- Name: socialaccount_socialapp_sites; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE socialaccount_socialapp_sites (
+    id integer NOT NULL,
+    socialapp_id integer NOT NULL,
+    site_id integer NOT NULL
+);
+
+
+ALTER TABLE socialaccount_socialapp_sites OWNER TO avatar2k;
+
+--
+-- Name: socialaccount_socialapp_sites_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE socialaccount_socialapp_sites_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE socialaccount_socialapp_sites_id_seq OWNER TO avatar2k;
+
+--
+-- Name: socialaccount_socialapp_sites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE socialaccount_socialapp_sites_id_seq OWNED BY socialaccount_socialapp_sites.id;
+
+
+--
+-- Name: socialaccount_socialtoken; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE socialaccount_socialtoken (
+    id integer NOT NULL,
+    token text NOT NULL,
+    token_secret text NOT NULL,
+    expires_at timestamp with time zone,
+    account_id integer NOT NULL,
+    app_id integer NOT NULL
+);
+
+
+ALTER TABLE socialaccount_socialtoken OWNER TO avatar2k;
+
+--
+-- Name: socialaccount_socialtoken_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE socialaccount_socialtoken_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE socialaccount_socialtoken_id_seq OWNER TO avatar2k;
+
+--
+-- Name: socialaccount_socialtoken_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE socialaccount_socialtoken_id_seq OWNED BY socialaccount_socialtoken.id;
+
+
+--
+-- Name: user_profile; Type: TABLE; Schema: public; Owner: avatar2k
+--
+
+CREATE TABLE user_profile (
+    id integer NOT NULL,
+    avatar character varying(100),
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE user_profile OWNER TO avatar2k;
+
+--
+-- Name: user_profile_id_seq; Type: SEQUENCE; Schema: public; Owner: avatar2k
+--
+
+CREATE SEQUENCE user_profile_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE user_profile_id_seq OWNER TO avatar2k;
+
+--
+-- Name: user_profile_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avatar2k
+--
+
+ALTER SEQUENCE user_profile_id_seq OWNED BY user_profile.id;
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY account_emailaddress ALTER COLUMN id SET DEFAULT nextval('account_emailaddress_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY account_emailconfirmation ALTER COLUMN id SET DEFAULT nextval('account_emailconfirmation_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_group ALTER COLUMN id SET DEFAULT nextval('auth_group_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_group_permissions ALTER COLUMN id SET DEFAULT nextval('auth_group_permissions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_permission ALTER COLUMN id SET DEFAULT nextval('auth_permission_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_user ALTER COLUMN id SET DEFAULT nextval('auth_user_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_user_groups ALTER COLUMN id SET DEFAULT nextval('auth_user_groups_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_user_user_permissions ALTER COLUMN id SET DEFAULT nextval('auth_user_user_permissions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY django_admin_log ALTER COLUMN id SET DEFAULT nextval('django_admin_log_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY django_content_type ALTER COLUMN id SET DEFAULT nextval('django_content_type_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY django_migrations ALTER COLUMN id SET DEFAULT nextval('django_migrations_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY django_site ALTER COLUMN id SET DEFAULT nextval('django_site_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY gamelist_developer ALTER COLUMN id SET DEFAULT nextval('gamelist_developer_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY gamelist_game ALTER COLUMN id SET DEFAULT nextval('gamelist_game_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY gamelist_game_genre ALTER COLUMN id SET DEFAULT nextval('gamelist_game_genre_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY gamelist_game_users ALTER COLUMN id SET DEFAULT nextval('gamelist_game_users_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY gamelist_genre ALTER COLUMN id SET DEFAULT nextval('gamelist_genre_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY socialaccount_socialaccount ALTER COLUMN id SET DEFAULT nextval('socialaccount_socialaccount_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY socialaccount_socialapp ALTER COLUMN id SET DEFAULT nextval('socialaccount_socialapp_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY socialaccount_socialapp_sites ALTER COLUMN id SET DEFAULT nextval('socialaccount_socialapp_sites_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY socialaccount_socialtoken ALTER COLUMN id SET DEFAULT nextval('socialaccount_socialtoken_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY user_profile ALTER COLUMN id SET DEFAULT nextval('user_profile_id_seq'::regclass);
+
+
+--
+-- Data for Name: account_emailaddress; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY account_emailaddress (id, email, verified, "primary", user_id) FROM stdin;
+11	avatar2k@yandex.com	f	t	12
+\.
+
+
+--
+-- Name: account_emailaddress_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('account_emailaddress_id_seq', 11, true);
+
+
+--
+-- Data for Name: account_emailconfirmation; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY account_emailconfirmation (id, created, sent, key, email_address_id) FROM stdin;
+\.
+
+
+--
+-- Name: account_emailconfirmation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('account_emailconfirmation_id_seq', 1, false);
+
+
+--
+-- Data for Name: auth_group; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY auth_group (id, name) FROM stdin;
+\.
+
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('auth_group_id_seq', 1, false);
+
+
+--
+-- Data for Name: auth_group_permissions; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY auth_group_permissions (id, group_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('auth_group_permissions_id_seq', 1, false);
+
+
+--
+-- Data for Name: auth_permission; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY auth_permission (id, name, content_type_id, codename) FROM stdin;
+1	Can add log entry	1	add_logentry
+2	Can change log entry	1	change_logentry
+3	Can delete log entry	1	delete_logentry
+4	Can add permission	2	add_permission
+5	Can change permission	2	change_permission
+6	Can delete permission	2	delete_permission
+7	Can add group	3	add_group
+8	Can change group	3	change_group
+9	Can delete group	3	delete_group
+10	Can add user	4	add_user
+11	Can change user	4	change_user
+12	Can delete user	4	delete_user
+13	Can add content type	5	add_contenttype
+14	Can change content type	5	change_contenttype
+15	Can delete content type	5	delete_contenttype
+16	Can add session	6	add_session
+17	Can change session	6	change_session
+18	Can delete session	6	delete_session
+19	Can add site	7	add_site
+20	Can change site	7	change_site
+21	Can delete site	7	delete_site
+22	Can add email address	8	add_emailaddress
+23	Can change email address	8	change_emailaddress
+24	Can delete email address	8	delete_emailaddress
+25	Can add email confirmation	9	add_emailconfirmation
+26	Can change email confirmation	9	change_emailconfirmation
+27	Can delete email confirmation	9	delete_emailconfirmation
+28	Can add social application	10	add_socialapp
+29	Can change social application	10	change_socialapp
+30	Can delete social application	10	delete_socialapp
+31	Can add social account	11	add_socialaccount
+32	Can change social account	11	change_socialaccount
+33	Can delete social account	11	delete_socialaccount
+34	Can add social application token	12	add_socialtoken
+35	Can change social application token	12	change_socialtoken
+36	Can delete social application token	12	delete_socialtoken
+37	Can add Genre	13	add_genre
+38	Can change Genre	13	change_genre
+39	Can delete Genre	13	delete_genre
+40	Can add Developer	14	add_developer
+41	Can change Developer	14	change_developer
+42	Can delete Developer	14	delete_developer
+43	Can add Game	15	add_game
+44	Can change Game	15	change_game
+45	Can delete Game	15	delete_game
+49	Can add user profile	17	add_userprofile
+50	Can change user profile	17	change_userprofile
+51	Can delete user profile	17	delete_userprofile
+\.
+
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('auth_permission_id_seq', 51, true);
+
+
+--
+-- Data for Name: auth_user; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
+12	pbkdf2_sha256$24000$2BlYhGrV134h$cCHQwzS+htsK3vLz5SuAXTi+YbsR+Unh426VaV0nR2o=	2016-08-17 19:49:22.293963+03	f	firstuser			avatar2k@yandex.com	f	t	2016-08-17 19:45:21.917046+03
+1	pbkdf2_sha256$24000$nmI7xJc6NIHl$bFw/zmK/GGRG2wk8TrA6w/mnyo+oTXJVSpsCc8OfLbo=	2016-08-17 19:53:12.499298+03	t	avatar2k			avatar2k@yandex.ru	t	t	2016-08-09 17:42:04.349121+03
+\.
+
+
+--
+-- Data for Name: auth_user_groups; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY auth_user_groups (id, user_id, group_id) FROM stdin;
+\.
+
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('auth_user_groups_id_seq', 1, false);
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('auth_user_id_seq', 12, true);
+
+
+--
+-- Data for Name: auth_user_user_permissions; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('auth_user_user_permissions_id_seq', 1, false);
+
+
+--
+-- Data for Name: django_admin_log; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) FROM stdin;
+1	2016-08-09 20:59:09.954314+03	1	Action	1	Added.	13	1
+2	2016-08-09 20:59:16.270571+03	2	Adventure	1	Added.	13	1
+3	2016-08-09 20:59:24.25205+03	3	Arcade	1	Added.	13	1
+4	2016-08-09 20:59:27.688588+03	4	Battle Arena	1	Added.	13	1
+5	2016-08-09 20:59:30.364751+03	5	Beat 'em up	1	Added.	13	1
+6	2016-08-09 20:59:33.2092+03	6	Board game	1	Added.	13	1
+7	2016-08-09 20:59:36.157768+03	7	Breakout	1	Added.	13	1
+8	2016-08-09 20:59:42.945853+03	8	Car Combat	1	Added.	13	1
+9	2016-08-09 20:59:45.48145+03	9	Card Game	1	Added.	13	1
+10	2016-08-09 20:59:49.214708+03	10	City-Buliding	1	Added.	13	1
+11	2016-08-09 20:59:51.850255+03	11	C	1	Added.	13	1
+12	2016-08-09 21:00:02.047605+03	12	Educational	1	Added.	13	1
+13	2016-08-09 21:00:05.786003+03	13	Fighting	1	Added.	13	1
+14	2016-08-09 21:00:07.683345+03	14	F	1	Added.	13	1
+15	2016-08-09 21:00:11.10332+03	15	F	1	Added.	13	1
+16	2016-08-09 21:00:22.778267+03	16	H	1	Added.	13	1
+17	2016-08-09 21:00:27.030584+03	17	H	1	Added.	13	1
+18	2016-08-09 21:00:32.377679+03	18	Hidden Object	1	Added.	13	1
+19	2016-08-09 21:00:44.685777+03	17	H	3		13	1
+20	2016-08-09 21:00:44.695837+03	16	H	3		13	1
+21	2016-08-09 21:00:44.697378+03	15	F	3		13	1
+22	2016-08-09 21:00:44.699333+03	14	F	3		13	1
+23	2016-08-09 21:00:44.700736+03	11	C	3		13	1
+24	2016-08-09 21:00:50.488055+03	19	Compilation	1	Added.	13	1
+25	2016-08-09 21:00:55.519809+03	20	Educational	1	Added.	13	1
+26	2016-08-09 21:01:02.100389+03	21	Fighting	1	Added.	13	1
+27	2016-08-09 21:01:04.58494+03	22	Fitness	1	Added.	13	1
+28	2016-08-09 21:01:09.578666+03	23	Flight Combat	1	Added.	13	1
+29	2016-08-09 21:01:13.23177+03	24	Flight Combat	1	Added.	13	1
+30	2016-08-09 21:01:21.628146+03	24	Flight Combat	3		13	1
+31	2016-08-09 21:01:32.039931+03	25	Hidden Object	1	Added.	13	1
+32	2016-08-09 21:01:34.941905+03	26	Hack and Slash	1	Added.	13	1
+33	2016-08-09 21:01:37.332741+03	27	Horror	1	Added.	13	1
+34	2016-08-09 21:01:44.281381+03	28	Music/Rhythm	1	Added.	13	1
+35	2016-08-09 21:01:47.36962+03	29	Open World	1	Added.	13	1
+36	2016-08-09 21:01:49.36203+03	30	Party	1	Added.	13	1
+37	2016-08-09 21:01:51.300108+03	31	Platform	1	Added.	13	1
+38	2016-08-09 21:01:53.34898+03	32	Puzzle	1	Added.	13	1
+39	2016-08-09 21:01:58.920625+03	33	Racing	1	Added.	13	1
+40	2016-08-09 21:02:01.231888+03	34	Roguelike	1	Added.	13	1
+41	2016-08-09 21:02:03.498764+03	35	RPG	1	Added.	13	1
+42	2016-08-09 21:02:07.022824+03	36	Sandbox	1	Added.	13	1
+43	2016-08-09 21:02:08.867389+03	37	Shooter	1	Added.	13	1
+44	2016-08-09 21:02:10.501162+03	38	Simulation	1	Added.	13	1
+45	2016-08-09 21:02:12.112376+03	39	Sports	1	Added.	13	1
+46	2016-08-09 21:02:14.49039+03	40	Stealth	1	Added.	13	1
+47	2016-08-09 21:02:19.362174+03	41	Strategy	1	Added.	13	1
+48	2016-08-09 21:02:22.165965+03	42	Tactical	1	Added.	13	1
+49	2016-08-09 21:02:24.87117+03	43	Third-Person	1	Added.	13	1
+50	2016-08-09 21:02:27.74312+03	44	Tower Defense	1	Added.	13	1
+51	2016-08-09 21:02:31.584696+03	45	Visual Novel	1	Added.	13	1
+52	2016-08-09 21:02:53.277224+03	18	Hidden Object	3		13	1
+53	2016-08-09 21:02:53.280201+03	13	Fighting	3		13	1
+54	2016-08-09 21:02:53.281648+03	12	Educational	3		13	1
+55	2016-08-09 21:11:49.706443+03	1	The Walking Dead	1	Added.	15	1
+56	2016-08-09 21:12:10.989095+03	2	Guacamelee!	1	Added.	15	1
+57	2016-08-10 15:54:54.756572+03	2	Guacamelee!	2	Changed users.	15	1
+58	2016-08-10 15:55:42.228905+03	2	Guacamelee!	2	Changed users.	15	1
+59	2016-08-10 15:57:23.711878+03	2	Guacamelee!	2	Changed users.	15	1
+60	2016-08-10 16:00:27.298603+03	2	Guacamelee!	2	Changed users.	15	1
+61	2016-08-10 16:03:24.311467+03	2	Guacamelee!	2	Changed users.	15	1
+62	2016-08-10 16:04:38.063822+03	2	Guacamelee!	2	Changed users.	15	1
+63	2016-08-15 16:13:51.064643+03	3	randomdude	3		4	1
+64	2016-08-15 21:38:31.120674+03	5	firstuser	3		4	1
+65	2016-08-15 21:38:31.131015+03	4	randomdude	3		4	1
+66	2016-08-15 22:06:43.66792+03	6	firstuser	3		4	1
+67	2016-08-15 22:06:52.184948+03	2	tayosha	3		4	1
+68	2016-08-15 22:18:49.372503+03	7	firstuser	3		4	1
+69	2016-08-15 22:23:46.5302+03	8	firstuser	3		4	1
+70	2016-08-15 22:27:16.568149+03	9	firstuser	3		4	1
+71	2016-08-15 22:32:19.252253+03	10	firstuser	3		4	1
+72	2016-08-15 22:34:20.344391+03	11	firstuser	3		4	1
+\.
+
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('django_admin_log_id_seq', 72, true);
+
+
+--
+-- Data for Name: django_content_type; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY django_content_type (id, app_label, model) FROM stdin;
+1	admin	logentry
+2	auth	permission
+3	auth	group
+4	auth	user
+5	contenttypes	contenttype
+6	sessions	session
+7	sites	site
+8	account	emailaddress
+9	account	emailconfirmation
+10	socialaccount	socialapp
+11	socialaccount	socialaccount
+12	socialaccount	socialtoken
+13	gamelist	genre
+14	gamelist	developer
+15	gamelist	game
+17	gamelist	userprofile
+\.
+
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('django_content_type_id_seq', 17, true);
+
+
+--
+-- Data for Name: django_migrations; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY django_migrations (id, app, name, applied) FROM stdin;
+1	contenttypes	0001_initial	2016-08-09 17:41:15.863844+03
+2	auth	0001_initial	2016-08-09 17:41:15.938935+03
+3	account	0001_initial	2016-08-09 17:41:15.977074+03
+4	account	0002_email_max_length	2016-08-09 17:41:15.999396+03
+5	admin	0001_initial	2016-08-09 17:41:16.024782+03
+6	admin	0002_logentry_remove_auto_add	2016-08-09 17:41:16.045005+03
+7	contenttypes	0002_remove_content_type_name	2016-08-09 17:41:16.097479+03
+8	auth	0002_alter_permission_name_max_length	2016-08-09 17:41:16.110205+03
+9	auth	0003_alter_user_email_max_length	2016-08-09 17:41:16.124741+03
+10	auth	0004_alter_user_username_opts	2016-08-09 17:41:16.140082+03
+11	auth	0005_alter_user_last_login_null	2016-08-09 17:41:16.155003+03
+12	auth	0006_require_contenttypes_0002	2016-08-09 17:41:16.158538+03
+13	auth	0007_alter_validators_add_error_messages	2016-08-09 17:41:16.169326+03
+14	sessions	0001_initial	2016-08-09 17:41:16.179618+03
+15	sites	0001_initial	2016-08-09 17:41:16.191696+03
+16	sites	0002_alter_domain_unique	2016-08-09 17:41:16.199561+03
+17	socialaccount	0001_initial	2016-08-09 17:41:16.308812+03
+18	socialaccount	0002_token_max_lengths	2016-08-09 17:41:16.395654+03
+19	socialaccount	0003_extra_data_default_dict	2016-08-09 17:41:16.418275+03
+20	gamelist	0001_initial	2016-08-09 20:16:48.240721+03
+21	gamelist	0002_auto_20160809_1810	2016-08-09 21:10:50.56113+03
+22	gamelist	0003_game_users	2016-08-10 00:49:49.607815+03
+23	gamelist	0004_userprofile	2016-08-15 21:58:50.451647+03
+24	gamelist	0005_userprofile_avatar	2016-08-17 19:43:29.302272+03
+25	gamelist	0006_auto_20160817_1644	2016-08-17 19:44:27.958517+03
+26	gamelist	0007_userprofile	2016-08-17 19:52:18.949986+03
+\.
+
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('django_migrations_id_seq', 26, true);
+
+
+--
+-- Data for Name: django_session; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY django_session (session_key, session_data, expire_date) FROM stdin;
+86h286wijtyuf9ehm14u7ekr1zovawye	ZjNkM2RkNzQ1NTA4NjA5ZWYxOTE4YjdjYjdmZTA1NWE2OWNiYmIyNDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9oYXNoIjoiZDAyOGFiMzNhYzMyNmQ3MDYyYjA2YWQ1MmQwMDMzMDgzMzAyMWZiZCIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=	2016-08-31 19:53:12.502301+03
+\.
+
+
+--
+-- Data for Name: django_site; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY django_site (id, domain, name) FROM stdin;
+1	example.com	example.com
+\.
+
+
+--
+-- Name: django_site_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('django_site_id_seq', 1, true);
+
+
+--
+-- Data for Name: gamelist_developer; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY gamelist_developer (id, name, founded, description) FROM stdin;
+\.
+
+
+--
+-- Name: gamelist_developer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('gamelist_developer_id_seq', 1, false);
+
+
+--
+-- Data for Name: gamelist_game; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY gamelist_game (id, name, date, cover, developer_id) FROM stdin;
+1	The Walking Dead	\N	covers/The_Walking_Dead_-_A_Telltale_Games_Series_cover_art_dOf2YJz.jpg	\N
+3	The Last of Us	\N	covers/the-last-of-us-box-art_4SgyyAf.jpg	\N
+2	Guacamelee!	\N	covers/guacamelee_MZNVa8Y.jpg	\N
+\.
+
+
+--
+-- Data for Name: gamelist_game_genre; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY gamelist_game_genre (id, game_id, genre_id) FROM stdin;
+1	1	27
+2	2	5
+3	3	2
+4	3	27
+\.
+
+
+--
+-- Name: gamelist_game_genre_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('gamelist_game_genre_id_seq', 4, true);
+
+
+--
+-- Name: gamelist_game_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('gamelist_game_id_seq', 3, true);
+
+
+--
+-- Data for Name: gamelist_game_users; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY gamelist_game_users (id, game_id, user_id) FROM stdin;
+51	3	1
+\.
+
+
+--
+-- Name: gamelist_game_users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('gamelist_game_users_id_seq', 53, true);
+
+
+--
+-- Data for Name: gamelist_genre; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY gamelist_genre (id, name) FROM stdin;
+1	Action
+2	Adventure
+3	Arcade
+4	Battle Arena
+5	Beat 'em up
+6	Board game
+7	Breakout
+8	Car Combat
+9	Card Game
+10	City-Buliding
+19	Compilation
+20	Educational
+21	Fighting
+22	Fitness
+23	Flight Combat
+25	Hidden Object
+26	Hack and Slash
+27	Horror
+28	Music/Rhythm
+29	Open World
+30	Party
+31	Platform
+32	Puzzle
+33	Racing
+34	Roguelike
+35	RPG
+36	Sandbox
+37	Shooter
+38	Simulation
+39	Sports
+40	Stealth
+41	Strategy
+42	Tactical
+43	Third-Person
+44	Tower Defense
+45	Visual Novel
+\.
+
+
+--
+-- Name: gamelist_genre_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('gamelist_genre_id_seq', 45, true);
+
+
+--
+-- Data for Name: socialaccount_socialaccount; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY socialaccount_socialaccount (id, provider, uid, last_login, date_joined, extra_data, user_id) FROM stdin;
+\.
+
+
+--
+-- Name: socialaccount_socialaccount_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('socialaccount_socialaccount_id_seq', 1, false);
+
+
+--
+-- Data for Name: socialaccount_socialapp; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY socialaccount_socialapp (id, provider, name, client_id, secret, key) FROM stdin;
+\.
+
+
+--
+-- Name: socialaccount_socialapp_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('socialaccount_socialapp_id_seq', 1, false);
+
+
+--
+-- Data for Name: socialaccount_socialapp_sites; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY socialaccount_socialapp_sites (id, socialapp_id, site_id) FROM stdin;
+\.
+
+
+--
+-- Name: socialaccount_socialapp_sites_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('socialaccount_socialapp_sites_id_seq', 1, false);
+
+
+--
+-- Data for Name: socialaccount_socialtoken; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY socialaccount_socialtoken (id, token, token_secret, expires_at, account_id, app_id) FROM stdin;
+\.
+
+
+--
+-- Name: socialaccount_socialtoken_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('socialaccount_socialtoken_id_seq', 1, false);
+
+
+--
+-- Data for Name: user_profile; Type: TABLE DATA; Schema: public; Owner: avatar2k
+--
+
+COPY user_profile (id, avatar, user_id) FROM stdin;
+\.
+
+
+--
+-- Name: user_profile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: avatar2k
+--
+
+SELECT pg_catalog.setval('user_profile_id_seq', 1, false);
+
+
+--
+-- Name: account_emailaddress_email_key; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY account_emailaddress
+    ADD CONSTRAINT account_emailaddress_email_key UNIQUE (email);
+
+
+--
+-- Name: account_emailaddress_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY account_emailaddress
+    ADD CONSTRAINT account_emailaddress_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: account_emailconfirmation_key_key; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY account_emailconfirmation
+    ADD CONSTRAINT account_emailconfirmation_key_key UNIQUE (key);
+
+
+--
+-- Name: account_emailconfirmation_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY account_emailconfirmation
+    ADD CONSTRAINT account_emailconfirmation_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group_name_key; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_group
+    ADD CONSTRAINT auth_group_name_key UNIQUE (name);
+
+
+--
+-- Name: auth_group_permissions_group_id_0cd325b0_uniq; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_0cd325b0_uniq UNIQUE (group_id, permission_id);
+
+
+--
+-- Name: auth_group_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_group
+    ADD CONSTRAINT auth_group_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_permission_content_type_id_01ab375a_uniq; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_01ab375a_uniq UNIQUE (content_type_id, codename);
+
+
+--
+-- Name: auth_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT auth_permission_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups_user_id_94350c0c_uniq; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_94350c0c_uniq UNIQUE (user_id, group_id);
+
+
+--
+-- Name: auth_user_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_user
+    ADD CONSTRAINT auth_user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions_user_id_14a6b632_uniq; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_user_id_14a6b632_uniq UNIQUE (user_id, permission_id);
+
+
+--
+-- Name: auth_user_username_key; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_user
+    ADD CONSTRAINT auth_user_username_key UNIQUE (username);
+
+
+--
+-- Name: django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY django_admin_log
+    ADD CONSTRAINT django_admin_log_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_content_type_app_label_76bd3d3b_uniq; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY django_content_type
+    ADD CONSTRAINT django_content_type_app_label_76bd3d3b_uniq UNIQUE (app_label, model);
+
+
+--
+-- Name: django_content_type_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY django_content_type
+    ADD CONSTRAINT django_content_type_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY django_migrations
+    ADD CONSTRAINT django_migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_session_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY django_session
+    ADD CONSTRAINT django_session_pkey PRIMARY KEY (session_key);
+
+
+--
+-- Name: django_site_domain_a2e37b91_uniq; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY django_site
+    ADD CONSTRAINT django_site_domain_a2e37b91_uniq UNIQUE (domain);
+
+
+--
+-- Name: django_site_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY django_site
+    ADD CONSTRAINT django_site_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: gamelist_developer_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY gamelist_developer
+    ADD CONSTRAINT gamelist_developer_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: gamelist_game_genre_game_id_7b6c1e10_uniq; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY gamelist_game_genre
+    ADD CONSTRAINT gamelist_game_genre_game_id_7b6c1e10_uniq UNIQUE (game_id, genre_id);
+
+
+--
+-- Name: gamelist_game_genre_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY gamelist_game_genre
+    ADD CONSTRAINT gamelist_game_genre_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: gamelist_game_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY gamelist_game
+    ADD CONSTRAINT gamelist_game_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: gamelist_game_users_game_id_9fbee2bd_uniq; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY gamelist_game_users
+    ADD CONSTRAINT gamelist_game_users_game_id_9fbee2bd_uniq UNIQUE (game_id, user_id);
+
+
+--
+-- Name: gamelist_game_users_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY gamelist_game_users
+    ADD CONSTRAINT gamelist_game_users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: gamelist_genre_name_92b2f446_uniq; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY gamelist_genre
+    ADD CONSTRAINT gamelist_genre_name_92b2f446_uniq UNIQUE (name);
+
+
+--
+-- Name: gamelist_genre_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY gamelist_genre
+    ADD CONSTRAINT gamelist_genre_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: socialaccount_socialaccount_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY socialaccount_socialaccount
+    ADD CONSTRAINT socialaccount_socialaccount_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: socialaccount_socialaccount_provider_fc810c6e_uniq; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY socialaccount_socialaccount
+    ADD CONSTRAINT socialaccount_socialaccount_provider_fc810c6e_uniq UNIQUE (provider, uid);
+
+
+--
+-- Name: socialaccount_socialapp_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY socialaccount_socialapp
+    ADD CONSTRAINT socialaccount_socialapp_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: socialaccount_socialapp_sites_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY socialaccount_socialapp_sites
+    ADD CONSTRAINT socialaccount_socialapp_sites_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: socialaccount_socialapp_sites_socialapp_id_71a9a768_uniq; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY socialaccount_socialapp_sites
+    ADD CONSTRAINT socialaccount_socialapp_sites_socialapp_id_71a9a768_uniq UNIQUE (socialapp_id, site_id);
+
+
+--
+-- Name: socialaccount_socialtoken_app_id_fca4e0ac_uniq; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY socialaccount_socialtoken
+    ADD CONSTRAINT socialaccount_socialtoken_app_id_fca4e0ac_uniq UNIQUE (app_id, account_id);
+
+
+--
+-- Name: socialaccount_socialtoken_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY socialaccount_socialtoken
+    ADD CONSTRAINT socialaccount_socialtoken_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_profile_pkey; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY user_profile
+    ADD CONSTRAINT user_profile_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_profile_user_id_key; Type: CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY user_profile
+    ADD CONSTRAINT user_profile_user_id_key UNIQUE (user_id);
+
+
+--
+-- Name: account_emailaddress_e8701ad4; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX account_emailaddress_e8701ad4 ON account_emailaddress USING btree (user_id);
+
+
+--
+-- Name: account_emailaddress_email_03be32b2_like; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX account_emailaddress_email_03be32b2_like ON account_emailaddress USING btree (email varchar_pattern_ops);
+
+
+--
+-- Name: account_emailconfirmation_6f1edeac; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX account_emailconfirmation_6f1edeac ON account_emailconfirmation USING btree (email_address_id);
+
+
+--
+-- Name: account_emailconfirmation_key_f43612bd_like; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX account_emailconfirmation_key_f43612bd_like ON account_emailconfirmation USING btree (key varchar_pattern_ops);
+
+
+--
+-- Name: auth_group_name_a6ea08ec_like; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX auth_group_name_a6ea08ec_like ON auth_group USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: auth_group_permissions_0e939a4f; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX auth_group_permissions_0e939a4f ON auth_group_permissions USING btree (group_id);
+
+
+--
+-- Name: auth_group_permissions_8373b171; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX auth_group_permissions_8373b171 ON auth_group_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_permission_417f1b1c; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX auth_permission_417f1b1c ON auth_permission USING btree (content_type_id);
+
+
+--
+-- Name: auth_user_groups_0e939a4f; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX auth_user_groups_0e939a4f ON auth_user_groups USING btree (group_id);
+
+
+--
+-- Name: auth_user_groups_e8701ad4; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX auth_user_groups_e8701ad4 ON auth_user_groups USING btree (user_id);
+
+
+--
+-- Name: auth_user_user_permissions_8373b171; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX auth_user_user_permissions_8373b171 ON auth_user_user_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_user_user_permissions_e8701ad4; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX auth_user_user_permissions_e8701ad4 ON auth_user_user_permissions USING btree (user_id);
+
+
+--
+-- Name: auth_user_username_6821ab7c_like; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX auth_user_username_6821ab7c_like ON auth_user USING btree (username varchar_pattern_ops);
+
+
+--
+-- Name: django_admin_log_417f1b1c; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX django_admin_log_417f1b1c ON django_admin_log USING btree (content_type_id);
+
+
+--
+-- Name: django_admin_log_e8701ad4; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX django_admin_log_e8701ad4 ON django_admin_log USING btree (user_id);
+
+
+--
+-- Name: django_session_de54fa62; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX django_session_de54fa62 ON django_session USING btree (expire_date);
+
+
+--
+-- Name: django_session_session_key_c0390e0f_like; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX django_session_session_key_c0390e0f_like ON django_session USING btree (session_key varchar_pattern_ops);
+
+
+--
+-- Name: gamelist_game_3fd1a723; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX gamelist_game_3fd1a723 ON gamelist_game USING btree (developer_id);
+
+
+--
+-- Name: gamelist_game_genre_080a38f3; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX gamelist_game_genre_080a38f3 ON gamelist_game_genre USING btree (genre_id);
+
+
+--
+-- Name: gamelist_game_genre_6072f8b3; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX gamelist_game_genre_6072f8b3 ON gamelist_game_genre USING btree (game_id);
+
+
+--
+-- Name: gamelist_game_users_6072f8b3; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX gamelist_game_users_6072f8b3 ON gamelist_game_users USING btree (game_id);
+
+
+--
+-- Name: gamelist_game_users_e8701ad4; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX gamelist_game_users_e8701ad4 ON gamelist_game_users USING btree (user_id);
+
+
+--
+-- Name: socialaccount_socialaccount_e8701ad4; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX socialaccount_socialaccount_e8701ad4 ON socialaccount_socialaccount USING btree (user_id);
+
+
+--
+-- Name: socialaccount_socialapp_sites_9365d6e7; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX socialaccount_socialapp_sites_9365d6e7 ON socialaccount_socialapp_sites USING btree (site_id);
+
+
+--
+-- Name: socialaccount_socialapp_sites_fe95b0a0; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX socialaccount_socialapp_sites_fe95b0a0 ON socialaccount_socialapp_sites USING btree (socialapp_id);
+
+
+--
+-- Name: socialaccount_socialtoken_8a089c2a; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX socialaccount_socialtoken_8a089c2a ON socialaccount_socialtoken USING btree (account_id);
+
+
+--
+-- Name: socialaccount_socialtoken_f382adfe; Type: INDEX; Schema: public; Owner: avatar2k
+--
+
+CREATE INDEX socialaccount_socialtoken_f382adfe ON socialaccount_socialtoken USING btree (app_id);
+
+
+--
+-- Name: account_em_email_address_id_5b7f8c58_fk_account_emailaddress_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY account_emailconfirmation
+    ADD CONSTRAINT account_em_email_address_id_5b7f8c58_fk_account_emailaddress_id FOREIGN KEY (email_address_id) REFERENCES account_emailaddress(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: account_emailaddress_user_id_2c513194_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY account_emailaddress
+    ADD CONSTRAINT account_emailaddress_user_id_2c513194_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_group_permiss_permission_id_84c5c92e_fk_auth_permission_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permiss_permission_id_84c5c92e_fk_auth_permission_id FOREIGN KEY (permission_id) REFERENCES auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_group_permissions_group_id_b120cbf9_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_b120cbf9_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_permiss_content_type_id_2f476e4b_fk_django_content_type_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT auth_permiss_content_type_id_2f476e4b_fk_django_content_type_id FOREIGN KEY (content_type_id) REFERENCES django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_groups_group_id_97559544_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_group_id_97559544_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_groups_user_id_6a12ed8b_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_6a12ed8b_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_user_per_permission_id_1fbb5f2c_fk_auth_permission_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_per_permission_id_1fbb5f2c_fk_auth_permission_id FOREIGN KEY (permission_id) REFERENCES auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_content_type_id_c4bce8eb_fk_django_content_type_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY django_admin_log
+    ADD CONSTRAINT django_admin_content_type_id_c4bce8eb_fk_django_content_type_id FOREIGN KEY (content_type_id) REFERENCES django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log_user_id_c564eba6_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY django_admin_log
+    ADD CONSTRAINT django_admin_log_user_id_c564eba6_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: gamelist_game_developer_id_8729136c_fk_gamelist_developer_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY gamelist_game
+    ADD CONSTRAINT gamelist_game_developer_id_8729136c_fk_gamelist_developer_id FOREIGN KEY (developer_id) REFERENCES gamelist_developer(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: gamelist_game_genre_game_id_b3afb250_fk_gamelist_game_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY gamelist_game_genre
+    ADD CONSTRAINT gamelist_game_genre_game_id_b3afb250_fk_gamelist_game_id FOREIGN KEY (game_id) REFERENCES gamelist_game(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: gamelist_game_genre_genre_id_13021b44_fk_gamelist_genre_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY gamelist_game_genre
+    ADD CONSTRAINT gamelist_game_genre_genre_id_13021b44_fk_gamelist_genre_id FOREIGN KEY (genre_id) REFERENCES gamelist_genre(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: gamelist_game_users_game_id_99380b2d_fk_gamelist_game_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY gamelist_game_users
+    ADD CONSTRAINT gamelist_game_users_game_id_99380b2d_fk_gamelist_game_id FOREIGN KEY (game_id) REFERENCES gamelist_game(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: gamelist_game_users_user_id_ae7b26ec_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY gamelist_game_users
+    ADD CONSTRAINT gamelist_game_users_user_id_ae7b26ec_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: socialacc_account_id_951f210e_fk_socialaccount_socialaccount_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY socialaccount_socialtoken
+    ADD CONSTRAINT socialacc_account_id_951f210e_fk_socialaccount_socialaccount_id FOREIGN KEY (account_id) REFERENCES socialaccount_socialaccount(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: socialaccou_socialapp_id_97fb6e7d_fk_socialaccount_socialapp_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY socialaccount_socialapp_sites
+    ADD CONSTRAINT socialaccou_socialapp_id_97fb6e7d_fk_socialaccount_socialapp_id FOREIGN KEY (socialapp_id) REFERENCES socialaccount_socialapp(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: socialaccount_soc_app_id_636a42d7_fk_socialaccount_socialapp_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY socialaccount_socialtoken
+    ADD CONSTRAINT socialaccount_soc_app_id_636a42d7_fk_socialaccount_socialapp_id FOREIGN KEY (app_id) REFERENCES socialaccount_socialapp(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY socialaccount_socialaccount
+    ADD CONSTRAINT socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: socialaccount_socialapp_site_site_id_2579dee5_fk_django_site_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY socialaccount_socialapp_sites
+    ADD CONSTRAINT socialaccount_socialapp_site_site_id_2579dee5_fk_django_site_id FOREIGN KEY (site_id) REFERENCES django_site(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: user_profile_user_id_8fdce8e2_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: avatar2k
+--
+
+ALTER TABLE ONLY user_profile
+    ADD CONSTRAINT user_profile_user_id_8fdce8e2_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+\connect postgres
+
+SET default_transaction_read_only = off;
+
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.5.3
+-- Dumped by pg_dump version 9.5.3
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: postgres; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON DATABASE postgres IS 'default administrative connection database';
+
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+\connect template1
+
+SET default_transaction_read_only = off;
+
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.5.3
+-- Dumped by pg_dump version 9.5.3
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: template1; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON DATABASE template1 IS 'default template for new databases';
+
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database cluster dump complete
+--
+
