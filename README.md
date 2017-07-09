@@ -1,5 +1,5 @@
-# game_cat
-Game Catalogue Service
+# Gamecat
+## Game Catalogue Service
 
 Service for users to create and add game profiles to their accounts
 
